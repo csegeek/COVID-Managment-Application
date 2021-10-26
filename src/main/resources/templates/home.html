@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Covid-19 Country Statistics Management Application</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet"
+     href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
+     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" 
+     crossorigin="anonymous">
+   <style>
+       a {
+        position: absolute;
+      right: 20px;      
+}
+div{
+    margin-top: 100px;
+}
+
+   </style>
+
+</head>
+<body>
+    <div class="container ">
+    <h1>Coronavirus Statistics Management Application</h1>
+    <p>This application lists the current number of 
+        cases reported across states of India </p>
+<a href="/admin/statedata" class="btn btn-outline-primary" role="button">Admin Login</a>
+
+ <div class="jumbotron ">
+        <h1 class="display-4" th:text="${totalReportedCases}"></h1>
+        <p class="lead">Total cases reported as of today</p>
+        <hr class="my-4">
+
+        <h2>ActiveCases</h2>
+
+		<div id="container"
+			style="width: 700px; height: 500px; margin: 0 auto"></div>
+	</div>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/modules/exporting.js"></script>
+	<script th:inline="javascript">
+    $(function(){
+    Highcharts.chart('container', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Statewise Active cases Chart'
+        },
+        subtitle: {
+            text: 'Details'
+        },
+        xAxis: {
+          categories: [[${State}]],
+
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            max:100000,
+            title: {
+                text: 'Activecases'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.1f} K</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [{
+            name: 'Active',
+            data: [[${active}]]
+        }]
+      });
+    });
+</script>
+</div>
+
+<table class="table">
+    <tr>
+        <th>Sr.No</th>
+        <th>State</th>
+        <th>TotalCases</th>
+        <th>Recovered</th>
+        <th>ActiveCases</th>
+        <th>Death</th>
+        <th>Vaccinated</th>  
+    </tr>
+    <tr th:each="allStates : ${allStates}">
+        <td th:text="${allStates.stateid}"></td>
+        <td th:text="${allStates.state}"></td>
+        <td th:text="${allStates.totalcases}">0</td>
+        <td th:text="${allStates.recovered}">0</td>
+        <td th:text="${allStates.active}">0</td>
+        <td th:text="${allStates.death}">0</td>
+        <td th:text="${allStates.vaccinated}">0</td>
+    </tr>
+</table>
+</div>
+</body>
+</html>

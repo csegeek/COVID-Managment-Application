@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>AddState</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet"
+     href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
+     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" 
+     crossorigin="anonymous">
+     <style>
+       button{
+         margin-top: 20px;
+       }
+       a{
+         margin-top: 20px;
+         margin-left: 100px;
+         margin-bottom: 20px;
+       }
+     </style>
+</head>
+
+<body>
+    
+<div class="container">
+    <h2>Fill up the data required</h2>
+    <p>Please add related data to it's field carefully.</p>
+    <form action="#" th:action="@{/addstatedata}" th:object="${S}" method="POST">
+     
+     <div class="form-group">
+        <label>StateId:</label>
+       <input type="number" th:field="*{stateid}" class="form-control  " th:placeholder="StateId" />
+     </div>
+      <div class="form-group">
+        <label>State: </label>
+        <input type="text"  th:field="*{state}" class="form-control" placeholder="State"/>
+      </div>
+      <div class="form-group">
+        <label>TotalCases:</label>
+        <input type="number" th:field="*{totalcases}" class="form-control " placeholder="TotalCases" />
+      </div>
+      <div class="form-group">
+        <labelSt>Recovered:</label>
+        <input type="number" th:field="*{recovered}" class="form-control " placeholder="Recovered" />
+      </div>
+      <div class="form-group">
+        <label>Active:</label>
+        <input type="number"  th:field="*{active}" class="form-control "  placeholder="ActiveCases" />
+      </div>
+      <div class="form-group">
+        <label>Death:</label>
+        <input type="number" th:field="*{death}" class="form-control " placeholder="Death"  />
+      </div>
+      <div class="form-group">
+        <label>Vaccinated:</label>
+        <input type="number"   th:field="*{vaccinated}"  class="form-control " placeholder="Vaccinated" />
+      </div>
+     
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>  
+  <a href="/admin/statedata" class="btn btn-outline-primary" role="button">Dashboard</a>
+ 
+</body>
+</html>
