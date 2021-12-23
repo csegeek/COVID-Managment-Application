@@ -35,9 +35,10 @@ public State findById(int id) {
 }
 // iserting data into database
 public int Insert(State s) {
+    
     return jdbcTemplate.update("INSERT INTO StateData (stateid, state,totalcases,recovered,active,death,vaccinated) VALUES (?, ?, ?,?,?,?,?)",
      new Object[] {s.getStateid(),s.getState(),s.getTotalcases(),s.getRecovered(),s.getActive(),
-    s.getActive(),s.getDeath() });
+    s.getDeath(),s.getVaccinated() });
 }
 //update data into database
 
@@ -45,7 +46,7 @@ public int Update(State s){
     //**  implement error handling */
     return jdbcTemplate.update("UPDATE StateData SET stateid=?, state=?,totalcases=?,recovered=?,active=?,death=?,vaccinated=? WHERE stateid=?",
 new  Object[] {s.getStateid(), s.getState(),s.getTotalcases(),s.getRecovered(),s.getActive(),
-s.getDeath() , s.getVaccinated(),s.getStateid()});
+s.getDeath() , s.getVaccinated() ,s.getStateid()});
 
 }
 

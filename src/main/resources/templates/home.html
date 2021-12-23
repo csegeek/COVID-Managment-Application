@@ -17,26 +17,31 @@
 div{
     margin-top: 100px;
 }
-
+@media (min-width: 1405px) {
+  .container-fluid{
+    width: 1400px;
+  }
+}
    </style>
 
 </head>
 <body>
-    <div class="container ">
-    <h1>Coronavirus Statistics Management Application</h1>
+    <div class="container-fluid ">
+    <h1>Covid-19 Statistics Management Application</h1>
     <p>This application lists the current number of 
-        cases reported across states of India </p>
+        cases reported across states of India and COVID related data.</p>
 <a href="/admin/statedata" class="btn btn-outline-primary" role="button">Admin Login</a>
 
  <div class="jumbotron ">
         <h1 class="display-4" th:text="${totalReportedCases}"></h1>
         <p class="lead">Total cases reported as of today</p>
+        <p class="lead">Last Update:20-11-2021</p>
         <hr class="my-4">
 
-        <h2>ActiveCases</h2>
+        <h2>Vaccinations</h2>
 
 		<div id="container"
-			style="width: 700px; height: 500px; margin: 0 auto"></div>
+			style="width: 1200px; height: 700px; margin:50px; padding-bottom:80px;"></div>
 	</div>
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -52,7 +57,7 @@ div{
             type: 'column'
         },
         title: {
-            text: 'Statewise Active cases Chart'
+            text: 'Statewise Vaccination Chart'
         },
         subtitle: {
             text: 'Details'
@@ -63,19 +68,19 @@ div{
             crosshair: true
         },
         yAxis: {
-            min: 0,
-            max:100000,
+            min: 100000,
+            max:100000000,
             title: {
-                text: 'Activecases'
+                text: 'Vaccinations'
             }
         },
         tooltip: {
             headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-            '<td style="padding:0"><b>{point.y:.1f} K</b></td></tr>',
-            footerFormat: '</table>',
-            shared: true,
-            useHTML: true
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
         },
         plotOptions: {
             column: {
@@ -84,8 +89,8 @@ div{
             }
         },
         series: [{
-            name: 'Active',
-            data: [[${active}]]
+            name: 'Vaccinations',
+            data: [[${Vaccinated}]]
         }]
       });
     });

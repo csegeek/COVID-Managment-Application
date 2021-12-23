@@ -4,7 +4,10 @@ import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,10 +18,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.view.RedirectView;
 
 import covidstatics.covidstats.Dao.statedao;
 import covidstatics.covidstats.Entity.State;
+import covidstatics.covidstats.Services.Message;
 
+
+@Controller
 @RestController
 @EnableWebMvc
 public class Restcontroller {
@@ -34,9 +41,9 @@ public class Restcontroller {
     model.addAttribute("totalReportedCases", totalReportedCases);
     // for chart
     List<String> stateList= statedao.findAll().stream().map(x-> x.getState()).collect(Collectors.toList());
-	List<Long> activeList = statedao.findAll().stream().map(x-> x.getActive()).collect(Collectors.toList());
+	List<Long> VaccinationList = statedao.findAll().stream().map(x-> x.getVaccinated()).collect(Collectors.toList());
 	model.addAttribute("State", stateList);
-	model.addAttribute("active", activeList);
+	model.addAttribute("Vaccinated", VaccinationList);
     modelAndView.setViewName("home");
     return modelAndView;
 
@@ -51,7 +58,8 @@ public class Restcontroller {
     model.addAttribute("allStates",allStates);
     model.addAttribute("username", username);
     modelAndView.setViewName("admin");
-    return modelAndView;  }
+    return modelAndView;
+  }
 
 
 /*    @GetMapping(value="/statedata")
@@ -76,10 +84,26 @@ public class Restcontroller {
     }
 
     @PostMapping("/addstatedata")
-  public String Insert( @ModelAttribute("S") State S) {
+  public RedirectView  Insert( @ModelAttribute("S") State S ,HttpSession session) {
       //save to database,
-      statedao.Insert(S);
-  return  "redirect:/admin/statedata";
+      boolean flag=false;
+      List<State> data=statedao.findAll();
+     for( State s:data){
+         if(s.getStateid()==S.getStateid() || s.getState().equals(S.getState() ) ) {
+             flag=true;  
+          break;
+        }
+      }
+      if(flag==true){
+        session.setAttribute("message",new Message("Duplicate State ID or State Name Not Allowed please recheck data....", "danger")); 
+
+      }
+      
+     else{ statedao.Insert(S);
+      session.setAttribute("message",new Message("State Sucessfully Added ....", "success"));
+     }
+      RedirectView rv=new RedirectView("/admin/statedata ");
+      return rv;
   }
 
   //UPDATE STATE CONTROLLER 
@@ -94,25 +118,30 @@ public class Restcontroller {
       return modelAndView;    }
 
       @PostMapping("/Updatestate")
-      public String Update( @ModelAttribute("S") State S) {
+      public RedirectView Update( @ModelAttribute("S") State S,HttpSession session  ) {
           //save to database,
           statedao.Update(S);
-      return "redirect:/admin/statedata";
+          session.setAttribute("message",new Message("State Updated Sucessfully....", "info"));
+
+       RedirectView rv=new RedirectView("/admin/statedata");
+       return rv;
+     
       }
 
     // DELETION CONTROLLER 
     
  @GetMapping("/deletestate")
-    public String delete(@RequestParam int id){
+    public RedirectView delete(@RequestParam int id,HttpSession session ){
         statedao.deleteById(id);
-        return "redirect:/";
+        session.setAttribute("message",new Message("State Deleted Sucessfully  ....", "warning"));
+        RedirectView rv=new RedirectView("/admin/statedata");
+        return rv;
     
     }
 
     //BARCAHRT PRODUCTION
    @RequestMapping("/barChart")
-	public ModelAndView getAllEmployee(Model model) {	
-		
+	public ModelAndView getAllEmployee(Model model) {		
 	List<String> stateList= statedao.findAll().stream().map(x-> x.getState()).collect(Collectors.toList());
 	List<Long> activeList = statedao.findAll().stream().map(x-> x.getActive()).collect(Collectors.toList());
 	model.addAttribute("State", stateList);
