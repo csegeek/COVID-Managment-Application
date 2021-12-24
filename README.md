@@ -10,3 +10,4 @@ Covid statewise Data Managment Application
  5. BootStrap 4.0 for frontend
  6. Thymeleaf Template Engine.
  7. Postgre Sql
+ 8. Rest API
