@@ -35,8 +35,8 @@ public class Databasesecurity extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
         .antMatchers("/").permitAll()
-        .antMatchers("/admin/statedata").hasAnyRole( "ADMIN")
-        .antMatchers("/admin/statedata/{id}").hasAnyRole("ADMIN")
+        .antMatchers("/admin/statedata").hasAnyAuthority( "admin","role_admin")
+        .antMatchers("/admin/statedata/{id}").hasAnyAuthority("admin","role_admin")
         .and()
         .formLogin().and()  
         .httpBasic()  
